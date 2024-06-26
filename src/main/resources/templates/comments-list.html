@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>评论列表</title>
+  <style>
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    /* 导航菜单样式 */
+    .ui.menu {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .ui.menu .item {
+      color: #007bff;
+      font-size: 16px;
+      padding: 10px 15px;
+    }
+
+    .ui.menu .item.active {
+      background-color: #f7f7f7;
+    }
+
+    /* 评论列表表格样式 */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    thead {
+      background-color: #f7f7f7;
+    }
+
+    th, td {
+      text-align: left;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+
+    th {
+      font-weight: bold;
+    }
+
+    /* 操作按钮样式 */
+    .ui.button {
+      margin: 5px;
+      cursor: pointer;
+    }
+
+    /* 删除链接样式 */
+    a.delete-link {
+      color: #ff0000;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      table, thead, tbody, th, td, tr {
+        display: block;
+        width: 100%;
+      }
+      .ui.menu .item {
+        padding: 10px;
+      }
+
+      th, td {
+        box-sizing: border-box;
+      }
+    }
+  </style>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css">
+</head>
+<body>
+<div>
+  <nav class="ui top attached menu">
+    <div class="header item">
+      我的博客站点
+    </div>
+    <a href="/blog/" class="item">首页</a>
+    <a href="/blog/admin/blogs/" class="item">博客列表</a>
+    <a href="/blog/admin/comments/" class="item">评论列表</a>
+  </nav>
+  <h1>所有评论</h1>
+  <!-- 展示评论列表 -->
+  <table>
+    <thead>
+    <tr>
+      <th>昵称</th>
+      <th>评论内容</th>
+      <th>博客ID</th>
+      <th>创建时间</th>
+      <th>操作</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="comment : ${comments}">
+      <td th:text="${comment.nickname}"></td>
+      <td th:text="${comment.content}"></td>
+      <td th:text="${comment.blogId}"></td>
+      <td th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}"></td>
+      <td>
+        <a th:href="@{/admin/comments/delete/{id}(id=${comment.id})}" class="ui button">删除</a>
+      </td>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+
+</html>

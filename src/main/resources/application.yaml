@@ -1,0 +1,39 @@
+spring:
+  datasource:
+    url: jdbc:mysql://localhost:3306/myblog
+    username: root
+    password: 24823yaj
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  web:
+    resources:
+      static-locations: classpath:/templates/,classpath:/static/
+  thymeleaf:
+    mode: HTML
+    cache: false
+    prefix: classpath:/templates/
+  devtools:
+    livereload:
+      enabled: true
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+#  data:
+#    redis:
+#      host: localhost
+#      port: 6379
+
+debug: false
+
+server:
+  servlet:
+    context-path: /blog
+  port: 8080
+
+spring.servlet.multipart:
+  enabled: true
+  max-file-size: 100MB
+  max-request-size: 200MB

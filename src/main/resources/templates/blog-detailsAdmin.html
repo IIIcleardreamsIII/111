@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${blog.title}">博客标题</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css">
+  <style>
+    /* 全局样式 */
+    body {
+      background-color: #f4f4f4;
+      padding: 20px;
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    /* 导航链接样式 */
+    .ui.menu .item {
+      color: #0366d6;
+    }
+
+    .ui.menu .item:hover {
+      background-color: #f9f9f9;
+    }
+
+    /* 博客内容区域 */
+    .blog-content {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-radius: 4px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .blog-content h1 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 10px;
+    }
+
+    /* Markdown 内容样式 */
+    .markdown-content {
+      font-size: 16px;
+      line-height: 1.6;
+    }
+
+    .markdown-content h2 {
+      font-size: 20px;
+      border-bottom: 1px solid #eee;
+      padding-bottom: 5px;
+      margin: 20px 0;
+    }
+
+    .markdown-content h3 {
+      font-size: 18px;
+    }
+
+    /* 评论列表样式 */
+    .comment-list {
+      margin-top: 20px;
+    }
+
+    .comment-list li {
+      background-color: #fff;
+      border-radius: 4px;
+      padding: 10px;
+      margin-bottom: 10px;
+    }
+
+    /* 添加评论表单样式 */
+    #add-comment {
+      margin-top: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .form-group input[type="text"],
+    .form-group textarea {
+      width: 100%;
+      padding: 10px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+    }
+
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 15px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* 辅助文本样式 */
+    small {
+      display: block;
+      margin-top: 5px;
+      color: #666;
+    }
+  </style>
+</head>
+<body>
+<nav class="ui top attached menu">
+  <div class="header item">
+    我的博客站点
+  </div>
+  <a href="/blog/" class="item">首页</a>
+  <a href="/blog/admin/blogs/" class="item">博客列表</a>
+  <a href="/blog/admin/comments/" class="item">评论列表</a>
+</nav>
+<!-- 博客内容 -->
+<div class="blog-content">
+  <h1 th:text="${blog.title}">博客标题</h1>
+  <div th:utext="${htmlContent}" class="markdown-content"></div> <!-- 使用th:utext渲染HTML -->
+  <small>作者：<span th:text="${user.nickname}"></span> |
+    发布时间：<span th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd HH:mm')}"></span></small>
+</div>
+<!-- 评论区域 -->
+<h2>评论列表</h2>
+<div th:if="${not #lists.isEmpty(comment)}">
+  <ul>
+    <li th:each="comment : ${comment}">
+      <p th:text="${comment.content}">评论内容...</p>
+      <small>- <span th:text="${comment.nickname}"></span>
+        于<span th:text="${#dates.format(comment.createTime, 'yyyy-MM-dd HH:mm')}"></span>
+      </small>
+    </li>
+  </ul>
+</div>
+<!-- 添加评论表单 -->
+<section id="add-comment">
+  <h2>添加评论</h2>
+  <form action="#" th:action="@{__${blog.id}__/comments}" th:method="post">
+    <input type="hidden" name="blogId" th:value="${blog.id}">
+    <div class="form-group">
+      <label for="nickname">昵称:</label>
+      <input type="text" id="nickname" name="nickname" required>
+    </div>
+    <div class="form-group">
+      <label for="content">评论内容:</label>
+      <textarea id="content" name="content" required></textarea>
+    </div>
+
+    <button type="submit">提交评论</button>
+  </form>
+</section>
+<div class="blog-views">
+  <span th:text="${blog.views}">0</span> 次浏览
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    //统计浏览量
+    fetch('/frontend/blogs/views', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        blogId: [[${blog.id}]]
+      })
+    })
+            .then(response => response.json())
+            .then(data => {
+              console.log(data);
+            })
+            .catch(error => {
+              console.error('Error:', error);
+            });
+  }, true);
+</script>
+
+</body>
+</html>

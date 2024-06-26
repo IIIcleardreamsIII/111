@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <title>博客列表</title>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css">
+  <style>
+    body {
+      background-color: #f5f5f5;
+      padding: 20px;
+      font-family: 'Arial', sans-serif;
+    }
+
+    h1 {
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+
+    .ui.menu {
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    table {
+      width: 100%;
+      margin-top: 20px;
+      background-color: #fff;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    th, td {
+      padding: 10px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
+
+    th {
+      background-color: #f7f7f7;
+    }
+
+    td a {
+      color: #0366d6;
+      text-decoration: none;
+    }
+
+    td a:hover {
+      text-decoration: underline;
+    }
+
+    /* 用于标记已发布的博客 */
+    .published-yes {
+      color: #4CAF50;
+    }
+
+    /* 用于标记未发布的的博客 */
+    .published-no {
+      color: #f44336;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 768px) {
+      h1 {
+        font-size: 20px;
+      }
+
+      .ui.menu .item {
+        padding: 10px;
+      }
+
+      table {
+        font-size: 14px;
+      }
+    }
+    .ui.button {
+      background-color: #0055ff; /* 绿色背景 */
+      color: white;
+      padding: 10px 15px;
+      border-radius: 5px;
+      text-transform: uppercase; /* 按钮文本大写 */
+      transition: background-color 0.3s ease;
+    }
+
+    .ui.button:hover {
+      background-color: #0004ff; /* 鼠标悬停时的背景颜色 */
+    }
+  </style>
+</head>
+<body>
+<h1>博客列表</h1>
+<nav class="ui top attached menu">
+  <div class="header item">
+    我的博客站点
+  </div>
+  <a href="/blog/" class="item">首页</a>
+  <a href="/blog/frontend/blogs/" class="item">博客列表</a>
+  <a href="/blog/frontend/blogs/add" class="item">添加博客</a>
+</nav>
+<table>
+  <tr>
+    <th>标题</th>
+    <th>浏览量</th>
+    <th>已发布</th>
+
+    <th>更新时间</th>
+    <th>推荐</th>
+    <th>分享声明</th>
+    <th>操作</th>
+  </tr>
+  <tr th:each="blog : ${blogs}">
+    <td th:text="${blog.title}"></td>
+    <td th:text="${blog.views}"></td>
+    <td th:text="${blog.published} ? '是' : '否'"></td>
+    <!-- 其他属性根据实际情况进行修改，以下为示例 -->
+    <td th:text="${#dates.format(blog.updateTime, 'yyyy-MM-dd HH:mm')}"></td>
+    <td th:text="${blog.recommend} ? '是' : '否'"></td>
+    <td th:text="${blog.shareStatement} ? '允许' : '不允许'"></td>
+    <td>
+      <a href="#" th:href="@{/frontend/blogs/{id}(id=${blog.id})}" class="ui button">查看</a>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

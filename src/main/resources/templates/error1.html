@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>错误页面</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css">
+</head>
+<body>
+<nav class="ui top attached menu">
+    <div class="header item">
+        My Blog Site
+    </div>
+    <a href="/blog/" class="item">首页</a>
+    <a href="/blog/frontend/blogs/" class="item">博客列表</a>
+    <a href="/blog/frontend/blogs/add" class="item">添加博客</a>
+
+</nav>
+<h1>发生错误</h1>
+<p th:if="${error}" th:text="${error}"></p>
+<a href="/frontend/blogs">返回博客列表</a>
+</body>
+</html>

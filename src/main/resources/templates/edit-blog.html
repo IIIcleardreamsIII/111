@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑博客</title>
+    <!-- 引入Semantic UI的CSS -->
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css">
+    <!-- 引入SimpleMDE的CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simplemde/dist/simplemde.min.css">
+    <style>
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            padding: 20px;
+            background-color: #f4f4f4;
+        }
+
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        form {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            border-radius: 4px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input[type="text"],
+        textarea {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        textarea {
+            min-height: 200px;
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            background-color: #007bff;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s ease;
+        }
+
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        /* SimpleMDE 编辑器样式 */
+        .CodeMirror {
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            form {
+                padding: 10px;
+            }
+
+            input[type="text"],
+            textarea {
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+<nav class="ui top attached menu">
+    <div class="header item">
+        我的博客站点
+    </div>
+    <a href="/blog/" class="item">首页</a>
+    <a href="/blog/frontend/blogs/" class="item">博客列表</a>
+    <a href="/blog/frontend/blogs/add" class="item">添加博客</a>
+</nav>
+<h1>编辑博客</h1>
+<!-- 请注意，th:action 应该包含实际的id值，或者使用thymeleaf的表达式来动态生成 -->
+<form th:action="@{/frontend/blogs/edit/__${blog.id}__}" th:object="${blog}" method="post">
+    <input type="hidden" th:field="*{id}">
+    <div>
+        <label for="title">标题:</label>
+        <input type="text" id="title" th:field="*{title}" required>
+    </div>
+    <div>
+        <label for="content">内容:</label>
+        <!-- 确保textarea的id和name属性与th:field属性匹配 -->
+        <textarea id="content" name="content" th:field="*{content}" required></textarea>
+    </div>
+    <!-- 提交按钮不需要id，因为表单默认提交 -->
+    <button type="submit">更新</button>
+</form>
+
+<!-- 引入SimpleMDE的JavaScript -->
+<script src="https://cdn.jsdelivr.net/npm/simplemde/dist/simplemde.min.js"></script>
+<script>
+    // 等待DOM完全加载后再初始化SimpleMDE
+    window.onload = function() {
+        var simplemde = new SimpleMDE({ element: document.getElementById("content") });
+        // 将已有的Markdown内容设置到编辑器中
+        simplemde.value(document.getElementById('content').value);
+    };
+</script>
+</body>
+</html>

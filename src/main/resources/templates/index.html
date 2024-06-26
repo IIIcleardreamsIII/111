@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>我的博客首页</title>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.css">
+    <style>
+        /* 重置和基础样式 */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f4f4;
+        }
+
+        a {
+            color: #0366d6;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        /* 导航栏样式 */
+        .ui.menu {
+            background-color: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .ui.menu .item {
+            font-size: 16px;
+            padding: 10px 15px;
+            color: #333;
+        }
+
+        .ui.menu .item.active {
+            color: #007bff;
+            border-bottom: 2px solid #007bff;
+        }
+
+        /* 顶部图片和个人简介区域 */
+        .m-bg-class_outer {
+            position: relative;
+            width: 100%;
+            height: 90vh;
+            background-image: url('static/img/yuanshen.jpg'); /* 确保路径正确 */
+            background-size: cover;
+            background-position: center;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .m-bg-class_coverIndex {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .ui.circular.image {
+            border-color: #007bff;
+        }
+
+        .m-font-size-title-mediul {
+            font-size: 2.5em;
+            margin-top: 20px;
+            color: #333;
+        }
+        .m-bgIndex{
+            width: 100%;
+            height: 650px;
+            object-fit: cover;
+        }
+        /* 社交媒体图标按钮 */
+        .ui.circular.icon.buttons .ui.button {
+            margin: 5px;
+        }
+
+        /* 博客列表样式 */
+        .ui.items .item {
+            margin-bottom: 20px;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .ui.items .item .image {
+            height: 200px; /* 确保图片高度一致 */
+        }
+
+        .ui.items .item .content {
+            padding: 20px;
+        }
+
+        .ui.items .item .header {
+            font-size: 1.2em;
+        }
+
+        .ui.items .item .description {
+            font-size: 1em;
+            color: #666;
+        }
+
+        /* 分页控件样式 */
+        .ui.pagination.menu .item {
+            padding: 10px 15px;
+            margin-right: 5px;
+            border-radius: 4px;
+        }
+
+        /* 页脚样式 */
+        .ui.inverted.vertical.segment {
+            padding: 40px 0;
+        }
+
+        .ui.inverted.vertical.segment .container p {
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .m-bg-class_outer {
+                height: 70vh;
+            }
+
+            .ui.items .item .image {
+                height: auto;
+            }
+        }
+        /* 博客卡片内容区域 */
+        .item .content {
+            position: relative; /* 相对定位，为绝对定位的子元素提供参照 */
+        }
+
+        /* 浏览量和创建时间的容器 */
+        .item .meta-data {
+            position: absolute; /* 绝对定位 */
+            bottom: 0; /* 底部对齐 */
+            right: 0; /* 右侧对齐 */
+            margin: 10px; /* 与边缘的距离 */
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end; /* 内容在容器内右对齐 */
+        }
+
+        /* 单独的浏览量和创建时间标签 */
+        .item .meta-data .views,
+        .item .meta-data .date {
+            margin: 5px 0; /* 标签之间的间距 */
+            color: #666; /* 字体颜色，根据需要调整 */
+        }
+
+        /* 如果需要适配不同屏幕尺寸，可以添加媒体查询 */
+        @media (max-width: 768px) {
+            .item .meta-data {
+                align-items: stretch; /* 在小屏幕上，内容平铺 */
+                flex-direction: row;
+            }
+
+            .item .meta-data .views,
+            .item .meta-data .date {
+                margin: 0 5px; /* 调整小屏幕上的间距 */
+            }
+        }
+    </style>
+    <link rel="stylesheet" type="text/css" href="../static/css/index.css">
+</head>
+<body>
+<nav id="nav" class="ui grid-header" style="display: none">
+
+    <div class="ui container">
+        <div class="ui inverted secondary stackable menu">
+            <a href="#" th:href="@{/}"><h2 class="ui olive header item">我的博客</h2></a>
+            <a href="#" th:href="@{/}" class="active item"><i class="home icon"></i>首页</a>
+            <!-- 其他导航项 -->
+            <div class="right item">
+                <form name="search" action="#" th:action="@{/search}" method="post" target="_blank">
+                    <div class="ui icon transparent input">
+                        <input type="text" name="query" placeholder="Search...." th:value="${query}">
+                        <i onclick="document.forms['search'].submit()" class="search link icon"></i>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <a href="#" class="ui menu toggle black icon button m-mobile-hide" style="display: none">
+        <i class="sidebar icon"></i>
+    </a>
+</nav>
+
+<!-- 顶部图片和个人简介 -->
+
+<div class="m-bg-class_outer">
+    <img src="../static/img/img.png" th:src="@{/img/img.png}" alt="" class="m-bg-class_outer" style="width: 100%;height: 50%">
+    <div class="m-bg-class_coverIndex">
+
+        <img class="ui circular image" th:src="@{/img/me.jpg}" style="width: 150px;height: 150px;">
+        <div class="m-font-size-title-mediul">yaj</div>
+        <!-- 社交媒体链接 -->
+        <div class="ui circular icon buttons">
+            <a href="https://github.com/IIIcleardreamsIII" class="ui button"><i class="github icon"></i></a>
+            <a href="#" data-content="1404670552" data-position="bottom center" class="ui button"><i class="qq icon"></i></a>
+            <a href="https://blog.csdn.net/qq_38968133?spm=1000.2115.3001.5343" class="ui button"><i class="copyright outline icon" ></i></a>
+            <button class="ui button" data-content="1404670552@qq.com"><i class="envelope icon"></i></button>
+        </div>
+        <div class="m-font-size-text">欢迎来到我的小栈！</div>
+    </div>
+    <a href="http://localhost:8080/blog/login">登录</a>
+</div>
+<nav class="ui top attached menu">
+    <div class="header item">
+        My Blog Site
+    </div>
+    <a href="/blog/" class="item">首页</a>
+    <a href="/blog/frontend/blogs/" class="item">博客列表</a>
+    <a href="/blog/frontend/blogs/add" class="item">添加博客</a>
+
+</nav>
+<main class="ui container">
+    <section class="ui padded segment">
+        <h1>最新博客文章</h1>
+        <div class="ui relaxed divided items" th:each="blog : ${blogs}">
+            <div class="item">
+                <img class="image" th:src="@{/img/blog1img.jpg}">
+                <div class="content">
+                    <a class="header" th:href="@{/frontend/blogs/{id}(id=${blog.id})}" th:text="${blog.title}">博客标题</a>
+                    <div class="description" th:text="${blog.description}">博客简介...</div>
+                    <div class="meta-data">
+                        <p>类型</p>
+                        <span class="views" th:text="${blog.typeName}">类型</span>
+                        <p>浏览量</p>
+                        <span class="views" th:text="${blog.views}">浏览量</span>
+                        <p>创建时间</p>
+                        <span class="date" th:text="${#dates.format(blog.createTime, 'yyyy-MM-dd HH:mm:ss')}">创建时间</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- 分页控件 -->
+    <div th:if="${totalPages > 1}" class="ui pagination menu">
+        <!-- 上一页 -->
+        <a
+                th:href="@{/(page=${currentPage > 1 ? currentPage - 1 : 1})}"
+                class="item"
+                th:classappend="${(currentPage == 1) ? 'disabled' : ''}"
+        >上一页</a>
+        <!-- 页码列表 -->
+        <a th:each="pageNumber : ${#numbers.sequence(1, totalPages)}" th:href="@{/(page=${pageNumber})}" class="item" th:classappend="${pageNumber == currentPage ? 'active' : ''}" th:text="${pageNumber}"></a>
+        <!-- 下一页 -->
+        <a th:href="@{/(page=${currentPage + 1} <= ${totalPages} ? ${currentPage + 1} : ${totalPages})}" class="item" th:classappend="${currentPage == totalPages ? 'disabled' : ''}">下一页</a>
+    </div>
+</main>
+
+<footer class="ui inverted vertical segment">
+    <div class="ui center aligned container">
+        <p>&copy; 2024 yaj博客. 版权所有.</p>
+    </div>
+</footer>
+
+<!-- 引入Semantic UI的JavaScript -->
+<!--雪花效果-->
+<script src="https://www.lmlblog.com/winter/templets/xq/js/snowy.js"></script>
+<script src="https://www.lmlblog.com/blog/12/js/Snow.js"></script>
+<style type="text/css">
+    .snow-container{position:fixed;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:100001;}
+</style>
+<div class="snow-container"></div>
+<script src="https://cdn.jsdelivr.net/npm/semantic-ui/dist/semantic.min.js"></script>
+</body>
+</html>

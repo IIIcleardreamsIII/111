@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>编辑评论</title>
+  <!-- 这里可以添加外部 CSS 文件链接，例如：<link rel="stylesheet" href="/css/comment-edit-style.css"> -->
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      background-color: #f4f4f4;
+      padding: 20px;
+    }
+
+    form {
+      background-color: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      max-width: 400px;
+      margin: 30px auto;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"],
+    textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    textarea {
+      resize: vertical;
+      min-height: 150px;
+    }
+
+    button[type="submit"] {
+      background-color: #007bff;
+      color: white;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    button[type="submit"]:hover {
+      background-color: #0056b3;
+    }
+
+    /* 响应式设计 */
+    @media (max-width: 600px) {
+      form {
+        width: 100%;
+        margin: 20px;
+      }
+    }
+  </style>
+</head>
+<body>
+<nav class="ui top attached menu">
+  <div class="header item">
+    我的博客站点
+  </div>
+  <a href="/blog/" class="item">首页</a>
+  <a href="/blog/admin/blogs/" class="item">博客列表</a>
+  <a href="/blog/admin/comments/" class="item">评论列表</a>
+</nav>
+<form th:action="@{/admin/comments/edit/{id}(id=${comment.id})}" th:object="${comment}" method="post">
+  <input type="hidden" th:field="*{id}">
+  <div>
+    <label for="nickname">昵称:</label>
+    <input type="text" id="nickname" th:field="*{nickname}" required>
+  </div>
+  <div>
+    <label for="content">评论内容:</label>
+    <textarea id="content" th:field="*{content}" required></textarea>
+  </div>
+  <button type="submit">更新评论</button>
+</form>
+</body>
+</html>
