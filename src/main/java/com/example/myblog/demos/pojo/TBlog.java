@@ -33,6 +33,7 @@ public class TBlog {
     @OneToMany(mappedBy = "blogId", cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private List<TComment> comments;
     private String typeName;
+
     public void addComment(TComment comment) {
         if (this.comments == null) {
             this.comments = new ArrayList<>();

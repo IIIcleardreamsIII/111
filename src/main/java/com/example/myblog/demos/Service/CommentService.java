@@ -44,8 +44,6 @@ public class CommentService{
     public List<TComment> findCommentsByBlogId(Long blogId) {
         return commentRepository.findCommentsByBlogId(blogId);
     }
-    // 更新评论
-    // 在 CommentService 中更新评论
     @Transactional
     public void updateComment(TComment comment) {
         TComment existingComment = commentRepository.findById(comment.getId())
